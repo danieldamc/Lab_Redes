@@ -1,4 +1,5 @@
 import numpy as np
+from random import randint
 
 
 def create_board():
@@ -92,6 +93,16 @@ def array_to_msg(board):
         for y in x:
             msg += y
     return msg
+
+
+def random_bot_nazi(board):
+    randx = randint(0, 2)
+    randy = randint(0, 2)
+    while board[randx][randy] != '-':
+        randx = randint(0, 2)
+        randy = randint(0, 2)
+    board[randx][randy] = 'x'
+    return board
 
 # menu_1 = """- Seleccione una opcion\n1-Jugar\n2-Salir"""
 # print(results(msg_to_array("---------")))
