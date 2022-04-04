@@ -55,7 +55,7 @@ def results(board):
         if win(board, player):
             winner = player
     if np.all(board != '-') and winner == 0:
-        winner = '-1'
+        winner = '1'
     return winner
 
 
@@ -73,10 +73,10 @@ serverSocket = skt.socket(skt.AF_INET, skt.SOCK_DGRAM)
 clientSocket = skt.socket(skt.AF_INET, skt.SOCK_STREAM)
 clientSocket.bind((ADDRESS, CLIENT_PORT))
 clientSocket.listen()
+print("Esperando mensaje del cliente")
 clientConn, clientAddr = clientSocket.accept()
 
 while True:
-    print("Esperando mensaje del cliente")
     msg = clientConn.recv(1024).decode(FORMAT)
     print(f"Mensaje del cliente: {msg}")
     if msg == CLOSE_MSG:
@@ -85,7 +85,7 @@ while True:
         msg, addr = serverSocket.recvfrom(1024)
         if msg.decode(FORMAT) == CLOSING_MSG:
             print("El servidor gato ha cerrado")
-        print("Cerrando servidor intermedio")
+        print("El servidor intermedio esta cerrando")
         break
 
     if msg == DISP_MSG:
@@ -96,40 +96,43 @@ while True:
         if msg == 'OK':
             clientConn.send('OK'.encode(FORMAT))
             while True:
-                print(f"ADDR {addr}")
-                print('esperando board')
+                print(f"nueva addr servidor gato: {addr}")
+                print('Esperando mensaje del cliente')
                 msg = clientConn.recv(1024).decode(FORMAT)
                 # check if client win
-                print(msg)
+                print(f"Tabla recibida del cliente{msg}")
                 board = msg_to_array(msg)
                 winners = results(board)
-                if winners in ['-1', 'o', 'x']:
+                if winners in ['1', 'o', 'x']:
                     serverSocket.sendto(END_MSG.encode(FORMAT), addr)
                     clientConn.send(
                         (array_to_msg(board)+winners).encode(FORMAT))
                     msg, addr = serverSocket.recvfrom(1024)
+                    print('Juego Finalizado')
                     break
+                print('No hay ganador')
                 serverSocket.sendto(msg.encode(FORMAT), addr)
 
                 # check if server win
                 msg, addr = serverSocket.recvfrom(1024)
                 msg = msg.decode(FORMAT)
-                print(msg)
+                print(f"Tabla recibida del servidor gato: {msg}")
                 board = msg_to_array(msg)
                 winners = results(board)
-                if winners in ['-1', 'o', 'x']:
+                if winners in ['1', 'o', 'x']:
                     serverSocket.sendto(END_MSG.encode(FORMAT), addr)
                     clientConn.send(
                         (array_to_msg(board)+winners).encode(FORMAT))
                     msg, addr = serverSocket.recvfrom(1024)
+                    print("Juego Finalizado")
                     break
-
+                print('No hay ganador')
                 clientConn.send(msg.encode(FORMAT))
 
         else:
             clientConn.send('NO'.encode(FORMAT))
 
-
+serverSocket.close()
 clientConn.send(CLOSING_MSG.encode(FORMAT))
 clientConn.close()
 print('El servidor intermedio se ha cerrado exitosamente')

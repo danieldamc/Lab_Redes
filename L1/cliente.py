@@ -36,10 +36,10 @@ def election(board):
     display_board(board)
     cord = input("Ingrese su jugada (x,y): ")
     cord = list(map(int, cord.split(',')))
-    while board[cord[0]][cord[1]] != '-':
+    while board[cord[1]][cord[0]] != '-':
         cord = input("Jugada no valida ingrese su jugada nuevamente (x,y): ")
         cord = list(map(int, cord.split(',')))
-    board[cord[0]][cord[1]] = 'o'
+    board[cord[1]][cord[0]] = 'o'
 
 
 def display_board(arr):
@@ -70,7 +70,7 @@ while True:
     if sel == "1":
         serverSocket.send(DISP_MSG.encode(FORMAT))
         response = serverSocket.recv(1024).decode(FORMAT)
-        print(f"respuesta de disponibilidad:  {response}")
+        print(f"Respuesta de disponibilidad:  {response}")
         if response == "OK":
             print("--------Comienza el Juego--------")
             board = create_board()
@@ -85,7 +85,9 @@ while True:
                     board = msg_to_array(msg)
                     display_board(board)
                     if winner == 'o':
-                        print('Felicidades Ganeste!')
+                        print('Felicidades Ganaste!')
+                    elif winner == '1':
+                        print("Empate")
                     else:
                         print('Has Perdido')
                     break
@@ -96,5 +98,5 @@ while True:
         response = serverSocket.recv(1024).decode(FORMAT)
         if response == CLOSING_MSG:
             # se ha cerrado el servido intermedio y el servidor gato
-            print("Adios")
+            print("Adiós")
         break

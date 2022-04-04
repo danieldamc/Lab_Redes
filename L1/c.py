@@ -65,7 +65,7 @@ while True:
             print("Esperando Tabla")
             clientData, clientAddr = newClientSocket.recvfrom(1024)
             msg = clientData.decode(FORMAT)
-            print(f"Mensaje recivido: {msg}")
+            print(f"Tabla recivida: {msg}")
             print(f"Cerrando puerto: {new_port}")
             newClientSocket.close()
             new_port = randint(8000, 65535)
@@ -81,7 +81,7 @@ while True:
                 board = msg_to_array(msg)
                 board = random_bot_nazi(board)
                 response = array_to_msg(board)
-                print(f"respuesta del servidor gato: {response}")
+                print(f"Tabla respueta : {response}")
                 newClientSocket.sendto(response.encode(FORMAT), clientAddr)
 
         # abrir nuevo puerto 5000
