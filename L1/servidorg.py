@@ -10,6 +10,7 @@ END_MSG = 'END'
 
 
 def random_bot_nazi(board):
+    # quizas hacerlo mas nazi???
     randx = randint(0, 2)
     randy = randint(0, 2)
     while board[randx][randy] != '-':

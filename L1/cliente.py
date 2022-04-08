@@ -10,26 +10,52 @@ CLOSING_MSG = 'CLOSING'
 
 
 def create_board():
+    """
+    create_board crea un tabla de juego 3x3 nueva en la cual todas las posiciones contienen '-'
+
+    output:
+    board   : (ndarray) matrix que representa la tablad e juego
+    """
     board = []
     for i in range(3):
         row = []
         for j in range(3):
             row.append('-')
         board.append(row)
-    return np.array(board)
-
-
-def msg_to_array(msg):
-    arr = np.array(list(msg))
-    return np.reshape(arr, (3, 3))
+    board = np.array(board)
+    return board
 
 
 def array_to_msg(board):
+    """
+    array_to_msg convierte un ndarray len(board) en un string de largo len(board)**2.
+
+    input:
+    board   : (ndarray) matrix que representa la tabla de juego
+
+    output:
+    msg     : (string) string que representa la tabla de juego
+    """
     msg = ''
     for x in board:
         for y in x:
             msg += y
     return msg
+
+
+def msg_to_array(msg):
+    """
+    msg_to_array convierte un string en un arreglo de numpy
+
+    input:
+    msg     : (string) representa la tabla de juego.
+
+    output:
+    matrix  : (ndarray) matriz la cual representa la tabla de juego.
+    """
+    arr = np.array(list(msg))
+    matrix = np.reshape(arr, (3, 3))
+    return matrix
 
 
 def election(board):

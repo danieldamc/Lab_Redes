@@ -11,6 +11,16 @@ CLOSE_MSG = 'CLOSE'
 
 
 def win(board, player):
+    """
+    win  revisa si el jugador gano o no.
+
+    input:
+    board   : (ndarray) matriz de la tabla de juego.
+    player  : (string) simbolo que representa un jugador.
+
+    output:
+    win     : (bool) retorna True si el jugador (player) gana la partida, False si no.
+    """
     # rows
     for x in range(3):
         win = True
@@ -44,11 +54,6 @@ def win(board, player):
     return win
 
 
-def msg_to_array(msg):
-    arr = np.array(list(msg))
-    return np.reshape(arr, (3, 3))
-
-
 def results(board):
     winner = 0
     for player in ['o', 'x']:
@@ -60,11 +65,35 @@ def results(board):
 
 
 def array_to_msg(board):
+    """
+    array_to_msg convierte un ndarray len(board) en un string de largo len(board)**2.
+
+    input:
+    board   : (ndarray) matrix que representa la tabla de juego
+
+    output:
+    msg     : (string) string que representa la tabla de juego
+    """
     msg = ''
     for x in board:
         for y in x:
             msg += y
     return msg
+
+
+def msg_to_array(msg):
+    """
+    msg_to_array convierte un string en un arreglo de numpy
+
+    input:
+    msg     : (string) representa la tabla de juego.
+
+    output:
+    matrix  : (ndarray) matriz la cual representa la tabla de juego.
+    """
+    arr = np.array(list(msg))
+    matrix = np.reshape(arr, (3, 3))
+    return matrix
 
 
 serverPort = 5000
