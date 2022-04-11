@@ -129,7 +129,7 @@ while True:
                 print('Esperando mensaje del cliente')
                 msg = clientConn.recv(1024).decode(FORMAT)
                 # check if client win
-                print(f"Tabla recibida del cliente{msg}")
+                print(f"Tabla recibida del cliente: {msg}")
                 board = msg_to_array(msg)
                 winners = results(board)
                 if winners in ['1', 'o', 'x']:
