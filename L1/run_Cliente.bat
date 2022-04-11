@@ -1,1 +1,1 @@
-python cliente.py
+py cliente.py

@@ -121,10 +121,12 @@ func main() {
 
 }
 
+//retorna un numero aleatorio entre min y max.
 func randInt(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
+//revisa si hay errores.
 func checkErr(err error) {
 
 	if err != nil {
@@ -133,6 +135,7 @@ func checkErr(err error) {
 	}
 }
 
+// bot que juega posicionando su simbolo en algun punto del la tabla.
 func random_play_bot(board [3][3]string) [3][3]string {
 	randx := randInt(0, 3)
 	randy := randInt(0, 3)
@@ -146,6 +149,7 @@ func random_play_bot(board [3][3]string) [3][3]string {
 	return board
 }
 
+// convierte la matriz de la tabla a el mensaje que sera enviado.
 func array_to_msg(board [3][3]string) string {
 	msg := ""
 	for _, x := range board {
@@ -156,10 +160,12 @@ func array_to_msg(board [3][3]string) string {
 	return msg
 }
 
+//retorna el caracter que se encuentra el un indice (index) de un string (str).
 func atIndex(str string, index int) string {
 	return str[index : index+1]
 }
 
+// convierte un mensaje recibido a una matriz que representa la tabla.
 func msg_to_array(msg string) [3][3]string {
 	board := [3][3]string{
 		{atIndex(msg, 0), atIndex(msg, 1), atIndex(msg, 2)},

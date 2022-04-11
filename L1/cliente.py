@@ -59,6 +59,15 @@ def msg_to_array(msg):
 
 
 def election(board):
+    """
+    election  pide la eleccion al jugador.
+
+    input:
+    board     : (ndarray) tabla que representa el estado actual del juego.
+
+    output:
+    None
+    """
     display_board(board)
     cord = input("Ingrese su jugada (x,y): ")
     cord = list(map(int, cord.split(',')))
@@ -69,6 +78,15 @@ def election(board):
 
 
 def display_board(arr):
+    """
+    display_board  printea el estado actual de la tabla.
+
+    input:
+    arr     : (ndarray) tabla qur representa el estado actual de la tabla.
+
+    output:
+    None
+    """
     table = ". 0| 1 | 2 \n0  |   |   \n---+---+---\n1  |   |   \n---+---+---\n2  |   |   "
     pos = [14, 17, 21, 38, 41, 45, 62, 65, 69]
     tmp = list(table)
