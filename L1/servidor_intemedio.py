@@ -15,31 +15,29 @@ def win(board, player):
     win  revisa si el jugador gano o no.
 
     input:
-    board   : (ndarray) matriz de la tabla de juego.
+    board   : (list) matriz de la tabla de juego.
     player  : (string) simbolo que representa un jugador.
 
     output:
     win     : (bool) retorna True si el jugador (player) gana la partida, False si no.
     """
-    # rows
-    for x in range(3):
+    # rows and columms
+    win = False
+    if board[0][0] == board[0][1] == board[0][2] == player:
         win = True
-        for y in range(3):
-            if board[x, y] != player:
-                win = False
-                continue
-        if win:
-            return win
+    if board[1][0] == board[1][1] == board[1][2] == player:
+        win = True
+    if board[2][0] == board[2][1] == board[2][2] == player:
+        win = True
+    if board[0][0] == board[1][0] == board[2][0] == player:
+        win = True
+    if board[0][1] == board[1][1] == board[2][1] == player:
+        win = True
+    if board[0][2] == board[1][2] == board[2][2] == player:
+        win = True
 
-    # columns
-    for x in range(3):
-        win = True
-        for y in range(3):
-            if board[y][x] != player:
-                win = False
-                continue
-        if win:
-            return win
+    if win:
+        return win
 
     # diagonals
     win = True
@@ -55,11 +53,25 @@ def win(board, player):
 
 
 def results(board):
+    """
+    results  retorna un string que representa el estado actual de la tabla.
+
+    input: 
+    board   : (list) matriz que representa el estado actual de la tabla de juego.
+
+    output:
+    winner  : (str) char que es '1' si hay un empate, 'o' si gano o, 'x' si gano x y 0 si no hay ganadores.
+    """
     winner = 0
     for player in ['o', 'x']:
         if win(board, player):
             winner = player
-    if np.all(board != '-') and winner == 0:
+    cant = 0
+
+    for x in range(3):
+        cant += board[x].count('-')
+
+    if cant == 0 and winner == 0:
         winner = '1'
     return winner
 
@@ -69,7 +81,7 @@ def array_to_msg(board):
     array_to_msg convierte un ndarray len(board) en un string de largo len(board)**2.
 
     input:
-    board   : (ndarray) matrix que representa la tabla de juego
+    board   : (list) matrix que representa la tabla de juego
 
     output:
     msg     : (string) string que representa la tabla de juego
@@ -89,10 +101,16 @@ def msg_to_array(msg):
     msg     : (string) representa la tabla de juego.
 
     output:
-    matrix  : (ndarray) matriz la cual representa la tabla de juego.
+    matrix  : (list) matriz la cual representa la tabla de juego.
     """
-    arr = np.array(list(msg))
-    matrix = np.reshape(arr, (3, 3))
+    matrix = []
+    i = 0
+    for x in range(3):
+        row = []
+        for y in range(3):
+            row.append(msg[i])
+            i += 1
+        matrix.append(row)
     return matrix
 
 

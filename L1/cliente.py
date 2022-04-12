@@ -1,5 +1,4 @@
 import socket as skt
-import numpy as np
 
 ADDRESS = 'localhost'
 SERVER_PORT = 5001
@@ -14,7 +13,7 @@ def create_board():
     create_board crea un tabla de juego 3x3 nueva en la cual todas las posiciones contienen '-'
 
     output:
-    board   : (ndarray) matrix que representa la tablad e juego
+    board   : (list) matriz que representa la tablad e juego
     """
     board = []
     for i in range(3):
@@ -22,7 +21,6 @@ def create_board():
         for j in range(3):
             row.append('-')
         board.append(row)
-    board = np.array(board)
     return board
 
 
@@ -31,7 +29,7 @@ def array_to_msg(board):
     array_to_msg convierte un ndarray len(board) en un string de largo len(board)**2.
 
     input:
-    board   : (ndarray) matrix que representa la tabla de juego
+    board   : (list) matrix que representa la tabla de juego
 
     output:
     msg     : (string) string que representa la tabla de juego
@@ -51,10 +49,16 @@ def msg_to_array(msg):
     msg     : (string) representa la tabla de juego.
 
     output:
-    matrix  : (ndarray) matriz la cual representa la tabla de juego.
+    matrix  : (list) matriz la cual representa la tabla de juego.
     """
-    arr = np.array(list(msg))
-    matrix = np.reshape(arr, (3, 3))
+    matrix = []
+    i = 0
+    for x in range(3):
+        row = []
+        for y in range(3):
+            row.append(msg[i])
+            i += 1
+        matrix.append(row)
     return matrix
 
 
@@ -63,7 +67,7 @@ def election(board):
     election  pide la eleccion al jugador.
 
     input:
-    board     : (ndarray) tabla que representa el estado actual del juego.
+    board     : (list) tabla que representa el estado actual del juego.
 
     output:
     None
@@ -82,7 +86,7 @@ def display_board(arr):
     display_board  printea el estado actual de la tabla.
 
     input:
-    arr     : (ndarray) tabla qur representa el estado actual de la tabla.
+    arr     : (list) tabla qur representa el estado actual de la tabla.
 
     output:
     None
