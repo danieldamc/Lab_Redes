@@ -5,16 +5,13 @@ from mininet.topo import Topo
 
 
 class MyTopo(Topo):
-
-    "Topologia numero 1"
-
+    "Topologia Anillo simple"
     def __init__(self):
         "Creacion de topologia personalizada"
         Topo.__init__(self)
         #net = Mininet(controller = RemoteController)
         # net.addController('c0')
         # Hosts y switches
-
         h1 = self.addHost('h1', mac='00:00:00:00:00:01')
         h2 = self.addHost('h2', mac='00:00:00:00:00:02')
         h3 = self.addHost('h3', mac='00:00:00:00:00:03')
