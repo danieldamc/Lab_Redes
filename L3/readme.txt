@@ -10,7 +10,7 @@ docker build -t tarea3 .
 docker images
 
 #ejecuta y crea el contenedor, ejecutenlo en la carpeta raiz de su tarea
-docker run -it --rm --privileged -e DISPLAY \
+sudo docker run -it --rm --privileged -e DISPLAY \
              --name tarea3\
              -v /tmp/.X11-unix:/tmp/.X11-unix \
              -v /lib/modules:/lib/modules \

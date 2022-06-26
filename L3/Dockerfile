@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     tcpdump \
     python3.9 \
     git \
+    wget \
 && rm -rf /var/lib/apt/lists/* \
 && touch /etc/network/interfaces \
 && chmod +x /ENTRYPOINT.sh
