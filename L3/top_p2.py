@@ -13,8 +13,8 @@ class MyTopo(Topo):
         Topo.__init__(self)
         #net = Mininet(controller = RemoteController)
         #net.addController('c0')
-        #Hosts y switches
         
+        #hosts
         h1 = self.addHost( 'h1', mac = '00:00:00:00:00:01')
         h2 = self.addHost( 'h2', mac = '00:00:00:00:00:02')
         h3 = self.addHost( 'h3', mac = '00:00:00:00:00:03')
@@ -23,23 +23,34 @@ class MyTopo(Topo):
         h6 = self.addHost( 'h6', mac = '00:00:00:00:00:06')
         h7 = self.addHost( 'h7', mac = '00:00:00:00:00:07')
         h8 = self.addHost( 'h8', mac = '00:00:00:00:00:08')
+
+        #switches
         s1 = self.addSwitch( 's1', dpid = '1')
         s2 = self.addSwitch( 's2', dpid = '2')
         s3 = self.addSwitch( 's3', dpid = '3')
         s4 = self.addSwitch( 's4', dpid = '4')
+        s5 = self.addSwitch( 's5', dpid = '5')
 
-        #Anadir links 
-        self.addLink( h1, s1, 1, 2)
-        self.addLink( h2, s1, 4, 3)
-        self.addLink( s1, s2, 5, 6)
-        self.addLink( h3, s2, 8, 7)
-        self.addLink( h4, s2, 10, 9)
-        self.addLink( s2, s3, 11, 12)
-        self.addLink( h5, s3, 14, 13)
-        self.addLink( h6, s3, 16, 15)
-        self.addLink( s3, s4, 17, 18)
-        self.addLink( h7, s4, 22, 21)
-        self.addLink( h8, s4, 20, 19)
-        self.addLink( s4, s1, 23, 24)
+
+        #links 
+        self.addLink(s1, s2, 1, 2)
+        self.addLink(s2, s3, 3, 4)
+        self.addLink(s3, s4, 5, 6)
+        self.addLink(s4, s5, 7, 8)
+        self.addLink(s5, s1, 9, 10)
+        self.addLink(s4, s1, 11, 12)
+
+        #links switch 1
+        self.addLink(s1, h1, 13, 14)
+        self.addLink(s1, h2, 15, 16)
+        #links switch 2
+        self.addLink(s2, h3, 17, 18)
+        self.addLink(s2, h4, 19, 20)
+        #links switch 3
+        self.addLink(s3, h5, 21, 22)
+        self.addLink(s3, h6, 23, 24)
+        #links switch 5
+        self.addLink(s5, h7, 25, 26)
+        self.addLink(s5, h8, 27, 28)
 
 topos = {'MyTopo': (lambda: MyTopo())}
