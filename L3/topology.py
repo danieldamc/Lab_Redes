@@ -1,7 +1,7 @@
 #Ejecucion: sudo mn --custom topologia1.py --topo MyTopo --controller remote --switch ovsk --mac
 from mininet.topo import Topo
-#from mininet.node import RemoteController
-#from mininet.net import Mininet
+from mininet.node import RemoteController
+from mininet.net import Mininet
 
 
 class MyTopo(Topo):
