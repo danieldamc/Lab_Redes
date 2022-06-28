@@ -159,7 +159,7 @@ class LearningSwitch (object):
         flood("Port for %s unknown -- flooding" % (packet.dst,)) # 4a
       else:
         
-        """ TODO: ingresar aqui todos los if necesarios para las flow tables"""
+        """ Start """
 
         mac_list = [
           '00:00:00:00:00:01',
@@ -253,7 +253,7 @@ class LearningSwitch (object):
         """
         # Host 7 (HTTP Server)
         if port == 25 and packet.dst in self.macToPort:
-            # if packet destiny not from Switch 1 or Host 8 then drop
+            # if packet source not from Switch 1 or Host 8 then drop
             if packet.src not in ['00:00:00:00:00:01', '00:00:00:00:00:02']:
                 log.debug("Host 7: packet not from Switch 1\n\tdropping...")
                 drop()
@@ -280,7 +280,7 @@ class LearningSwitch (object):
 
         # Host 8 (HTTP Server)
         elif port == 27 and packet.dst in self.macToPort:
-            # if packet destiny is from Switch 1 or Host 7 then drop
+            # if packet source is from Switch 1 or Host 7 then drop
             if packet.src in ['00:00:00:00:00:01', '00:00:00:00:00:02', '00:00:00:00:00:07']:
                 log.debug("Host 8: packet not from Switch 2 or 3\n\tdropping...")
                 drop()

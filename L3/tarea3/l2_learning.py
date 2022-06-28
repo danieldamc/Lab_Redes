@@ -160,8 +160,7 @@ class LearningSwitch (object):
       if packet.dst not in self.macToPort: # 4
         flood("Port for %s unknown -- flooding" % (packet.dst,)) # 4a
       else:
-        
-        """ TODO: ingresar aqui todos los if necesarios para las flow tables"""
+        "Start"
 
         mac_list = [
           '00:00:00:00:00:01',
