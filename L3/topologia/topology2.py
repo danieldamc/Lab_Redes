@@ -6,7 +6,7 @@ from mininet.net import Mininet
 
 class MyTopo(Topo):
 
-    "Topologia numero 1"
+    "Topologia dos caminos"
 
     def __init__(self):
         "Creacion de topologia personalizada"
