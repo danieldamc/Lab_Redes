@@ -23,12 +23,17 @@ sudo docker run -it --rm --privileged -e DISPLAY \
 
 python3 pox.py log.level --DEBUG misc.full_payload tarea3.l2_learning openflow.discovery openflow.spanning_tree --no-flood --hold-down
 
+python3 pox.py log.level --DEBUG misc.full_payload tarea3.l2_learning2 openflow.discovery openflow.spanning_tree --no-flood --hold-down
+
 #mininet
 #en una consola a parte ejecuten los siguientes comandos para la parte de mininet
 
 docker exec -it tarea3 bash
 cd pox/topology
 mn --custom topology.py --topo MyTopo --mac --controller remote --switch ovsk
+
+mn --custom topology2.py --topo MyTopo --mac --controller remote --switch ovsk
+
 
 #notas
 

@@ -173,7 +173,7 @@ class LearningSwitch (object):
           '00:00:00:00:00:07',
           '00:00:00:00:00:08',
           '00:00:00:00:00:09',
-          '00:00:00:00:00:0A',
+          '00:00:00:00:00:0A'
         ]
         if packet.src not in mac_list:
           log.debug("External host packet")
@@ -240,8 +240,9 @@ class LearningSwitch (object):
           else:
             port = 9
 
+        
 
-        """ Fin """
+        """ End """
         
 
         #port = self.macToPort[packet.dst]
@@ -253,7 +254,6 @@ class LearningSwitch (object):
           drop(10)
           return
 
-        
 
         # 6
         log.debug("installing flow for %s.%i -> %s.%i" %

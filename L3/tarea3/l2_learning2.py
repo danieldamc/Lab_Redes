@@ -146,8 +146,6 @@ class LearningSwitch (object):
     self.macToPort[packet.src] = event.port # 1
 
 
-    
-
 
     if not self.transparent: # 2
       if packet.type == packet.LLDP_TYPE or packet.dst.isBridgeFiltered():
@@ -171,9 +169,7 @@ class LearningSwitch (object):
           '00:00:00:00:00:05',
           '00:00:00:00:00:06',
           '00:00:00:00:00:07',
-          '00:00:00:00:00:08',
-          '00:00:00:00:00:09',
-          '00:00:00:00:00:0A'
+          '00:00:00:00:00:08'
         ]
         if packet.src not in mac_list:
           log.debug("External host packet")
@@ -184,62 +180,131 @@ class LearningSwitch (object):
           drop()
           return
 
-        """ Try 2 """
+        """ Try 1 """
+
+
+
         # Switch 1
-        if event.port in [1, 10, 11, 13]:
+        if event.port in [10, 12, 13, 15]:
           if packet.dst == '00:00:00:00:00:01':
-            self.macToPort[packet.dst] = 11
-            port = 11
-          elif packet.dst == '00:00:00:00:00:02':
             self.macToPort[packet.dst] = 13
             port = 13
+          elif packet.dst == '00:00:00:00:00:02':
+            self.macToPort[packet.dst] = 15
+            port = 15
           else:
             port = 1
         
         # Switch 2 
-        elif event.port in [3, 2, 15, 17]:
+        elif event.port in [2, 17, 19]:
           if packet.dst == '00:00:00:00:00:03':
-            self.macToPort[packet.dst] = 15
-            port = 15
-          elif packet.dst == '00:00:00:00:00:04':
             self.macToPort[packet.dst] = 17
             port = 17
+          elif packet.dst == '00:00:00:00:00:04':
+            self.macToPort[packet.dst] = 19
+            port = 19
           else:
             port = 3
         
         # Switch 3 
-        elif event.port in [5, 4, 19, 21]:
+        elif event.port in [4, 21, 23]:
           if packet.dst == '00:00:00:00:00:05':
-            self.macToPort[packet.dst] = 19
-            port = 19
-          elif packet.dst == '00:00:00:00:00:06':
             self.macToPort[packet.dst] = 21
             port = 21
-          else:
-            port = 5
-        
-        # Switch 5 
-        elif event.port in [7, 6, 23, 25]:
-          if packet.dst == '00:00:00:00:00:09':
+          elif packet.dst == '00:00:00:00:00:06':
             self.macToPort[packet.dst] = 23
             port = 23
-          elif packet.dst == '00:00:00:00:00:0A':
-            self.macToPort[packet.dst] = 25
-            port = 25
           else:
-            port = 7
+            port = 5
 
         # Switch 4
-        elif event.port in [9, 8, 27, 29]:
+        elif event.port == 6:
+          if packet.dst in ['00:00:00:00:00:07', '00:00:00:00:00:08']:
+            #self.macToPort[packet.dst] = 27
+            port = 7
+          else:
+            port = 11
+        
+        # Switch 5 
+        elif event.port in [8, 25, 27]:
           if packet.dst == '00:00:00:00:00:07':
+            self.macToPort[packet.dst] = 25
+            port = 25
+          elif packet.dst == '00:00:00:00:00:08':
             self.macToPort[packet.dst] = 27
             port = 27
-          elif packet.dst == '00:00:00:00:00:08':
-            self.macToPort[packet.dst] = 29
-            port = 29
           else:
             port = 9
 
+        # Block Host-Host connection
+        if (packet.src not in ['00:00:00:00:00:07', '00:00:00:00:00:08'] and 
+            packet.dst not in ['00:00:00:00:00:07', '00:00:00:00:00:08']):
+         #port in [13, 15, 17, 19, 21, 23]:
+            drop()
+            return
+        """
+        - Consultas de hosts del Switch 1 deben ser respondidas por el 
+          Host 7 (Servidor HTTP), y debe rechazar consultas de hosts
+          unidos a Switch 2 y 3.
+        
+        - Consultas de hosts del Switch 2 o 3, deben ser respondidas por
+          el Host 8 (Servidor HTTP), y este debe rechazar consultas de 
+          hosts unidos a Switch 1
+        """
+        # Host 7 (HTTP Server)
+        if port == 25 and packet.dst in self.macToPort:
+            # if packet destiny not from Switch 1 or Host 8 then drop
+            if packet.src not in ['00:00:00:00:00:01', '00:00:00:00:00:02']:
+                log.debug("Host 7: packet not from Switch 1\n\tdropping...")
+                drop()
+                return
+            else:
+                # Check if http
+                tcp_msg = packet.find('tcp')
+                if tcp_msg is not None:
+                    # Can be HTTP
+                    if tcp_msg.SYN or tcp_msg.ACK or 'HTTP' in tcp_msg.payload:
+                        # Definitely is HTTP
+                        log.debug("HTTP detected")
+                        log.debug(tcp_msg.payload)
+                    else:
+                        log.debug("Host 7: Message is not HTTP")
+                        drop()
+                        return
+                else:
+                    # isn't HTTP
+                    log.debug("Host 7: Message is not tcp")
+                    drop()
+                    return
+            #port = 9
+
+        # Host 8 (HTTP Server)
+        elif port == 27 and packet.dst in self.macToPort:
+            # if packet destiny is from Switch 1 or Host 7 then drop
+            if packet.src in ['00:00:00:00:00:01', '00:00:00:00:00:02', '00:00:00:00:00:07']:
+                log.debug("Host 8: packet not from Switch 2 or 3\n\tdropping...")
+                drop()
+                return
+            else:
+                # Check if http
+                tcp_msg = packet.find('tcp')
+                if tcp_msg is not None:
+                    # Can be HTTP
+                    if tcp_msg.SYN or tcp_msg.ACK or 'HTTP' in tcp_msg.payload:
+                        # Definitely is HTTP
+                        log.debug("HTTP detected")
+                        log.debug(tcp_msg.payload)
+                    else:
+                        log.debug("Host 8: Message is not HTTP")
+                        drop()
+                        return
+                else:
+                    # isn't HTTP
+                    log.debug("Host 8: Message is not tcp")
+                    drop()
+                    return
+            #port = 9
+        
         
 
         """ End """
@@ -260,14 +325,14 @@ class LearningSwitch (object):
                   (packet.src, event.port, packet.dst, port))
         msg = of.ofp_flow_mod()
         msg.match = of.ofp_match.from_packet(packet, event.port)
-        msg.idle_timeout = 10
+        msg.idle_timeout = 2 # original: 10
         msg.hard_timeout = 30
         msg.actions.append(of.ofp_action_output(port = port))
         msg.data = event.ofp # 6a
         self.connection.send(msg)
 
 
-class l2_learning (object):
+class l2_learning2 (object):
   """
   Waits for OpenFlow switches to connect and makes them learning switches.
   """
@@ -305,4 +370,4 @@ def launch (transparent=False, hold_down=_flood_delay, ignore = None):
     ignore = ignore.replace(',', ' ').split()
     ignore = set(str_to_dpid(dpid) for dpid in ignore)
 
-  core.registerNew(l2_learning, str_to_bool(transparent), ignore)
+  core.registerNew(l2_learning2, str_to_bool(transparent), ignore)
